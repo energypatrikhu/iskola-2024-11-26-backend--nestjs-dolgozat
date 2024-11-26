@@ -12,6 +12,7 @@ import {
 } from '@nestjs/common';
 import { AppService } from './app.service';
 import { Travels } from './travels';
+import type { CreateTravelDto, UpdateTravelDto } from './app.dto';
 
 @Controller()
 export class AppController {
@@ -32,17 +33,8 @@ export class AppController {
   @Post('/travels')
   addTravel(
     @Body()
-    data: {
-      destination: string;
-      description: string;
-      imgUrl: string;
-      price: number;
-    },
+    data: CreateTravelDto,
   ) {
-    if (!data.price || !data.destination || !data.description || !data.imgUrl) {
-      return 'Hiányzó adatok!';
-    }
-
     return this.travels.add({
       destination: data.destination,
       description: data.description,
@@ -56,13 +48,7 @@ export class AppController {
   updateTravel(
     @Param('id') id: string,
     @Body()
-    data: {
-      destination?: string;
-      description?: string;
-      imgUrl?: string;
-      price?: number;
-      discount?: number;
-    },
+    data: UpdateTravelDto,
   ) {
     const travel = this.travels.getById(parseInt(id));
     if (!travel) {
